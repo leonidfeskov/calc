@@ -1,24 +1,26 @@
-import React, { Component } from 'react';
+import React, { PropTypes, Component } from 'react';
 
-class Input extends Component {
+export default class Input extends Component {
+  onInputChange(e) {
+    this.props.setValue(e.target.value);
+  }
+
   render() {
-    let hint = this.props.hint ? this.props.hint : '';
-    let qustionIcon = this.props.hint ? <span className="glyphicon glyphicon-question-sign"></span> : '';
+    let { label, value, units, hint } = this.props;
+    let qustionIcon = hint ? <span className="glyphicon glyphicon-question-sign"></span> : '';
 
     return (
       <div className="form-group">
         <label title={hint}>
-          {this.props.label}:
+          {label}:
           {qustionIcon}
         </label>
         <div className="input-group">
-          <input type="text" className="form-control js-input-sum" value={this.props.value} />
-          <span className="input-group-addon">{this.props.units}</span>
+          <input type="text" className="form-control js-input-sum" value={value} onChange={this.onInputChange.bind(this)} />
+          <span className="input-group-addon">{units}</span>
         </div>
         <div className="text-danger js-input-error"></div>
       </div>
     );
   }
 }
-
-export default Input;

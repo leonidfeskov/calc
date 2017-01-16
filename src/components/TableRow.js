@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 class TableRow extends Component {
   render() {
-    let formatedPrice = n => n.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1 ');
+    let formatedPrice = (n) => n.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1 ');
 
     return (
       <tr>

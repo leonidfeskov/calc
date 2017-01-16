@@ -3,69 +3,11 @@ import TableRow from './TableRow';
 
 class Table extends Component {
   render() {
-    let round = n => Math.round(n * 100) / 100;
-  
-    let formatedMonth = (month) => {
-      if (month > 9) {
-          return month;
-      }
-      return '0' + month;
-    };
+      let tableData = this.props.tableData;
 
-    let calcPercentage = (sum, percent, date) => {
-      let daysPerMonth =  33 - new Date(date.getFullYear(), date.getMonth(), 33).getDate();
-      let daysPerYear = date.getFullYear() % 4 === 0 ? 366 : 365;
-      return round(sum * percent / 100 / daysPerYear * daysPerMonth);
-    };
-
-    let sum =     this.props.inputsData[0].value;
-    let rent =    this.props.inputsData[1].value;
-    let deposit = this.props.inputsData[2].value;
-    let credit =  this.props.inputsData[3].value;
-    let total =   this.props.inputsData[4].value;
-    let exist =   this.props.inputsData[5].value;
-
-    let now = new Date();
-
-    let rows = [];
-    let tableRows = [];
-
-    rows[0] = {};
-    rows[0].number = 1;
-    rows[0].date = now.getDate() + '.' + formatedMonth(now.getMonth() + 1) + '.' + now.getFullYear();
-    rows[0].deposit = exist;
-    rows[0].income = calcPercentage(rows[0].deposit, deposit, now);
-    rows[0].credit = total - exist;
-    rows[0].percentage = calcPercentage(rows[0].credit, credit, now);
-    rows[0].overRent = rent;
-    rows[0].overCredit = rows[0].percentage;
-
-    tableRows.push(<TableRow row={rows[0]} />);
-
-    let rowIndex = 1;
-    while (rows[rowIndex-1].deposit < total || rows[rowIndex-1].credit > 0) {
-        rows[rowIndex] = {};
-
-        rows[rowIndex].number = rowIndex + 1;
-
-        let nextMonth = new Date(now.getFullYear(), now.getMonth() + rowIndex, now.getDate());
-        rows[rowIndex].date = nextMonth.getDate() + '.' + formatedMonth(nextMonth.getMonth() + 1) + '.' + nextMonth.getFullYear();
-
-        rows[rowIndex].deposit = round(rows[rowIndex - 1].deposit + rows[rowIndex - 1].income + (sum - rent));
-
-        rows[rowIndex].income = calcPercentage(rows[rowIndex].deposit, deposit, nextMonth);
-
-        rows[rowIndex].credit = round(rows[rowIndex - 1].credit - sum + rows[rowIndex - 1].percentage);
-
-        rows[rowIndex].percentage = calcPercentage(rows[rowIndex].credit, credit, nextMonth);
-
-        rows[rowIndex].overRent = round(rows[rowIndex - 1].overRent + rent);
-
-        rows[rowIndex].overCredit = round(rows[rowIndex - 1].overCredit + rows[rowIndex].percentage);
-
-        tableRows.push(<TableRow row={rows[rowIndex]} />);
-        rowIndex++;
-    }
+      let tableRows = tableData.map(function(row, i) {
+          return <TableRow row={row} key={i} />
+      });
 
     return (
       <div className="mb20">
